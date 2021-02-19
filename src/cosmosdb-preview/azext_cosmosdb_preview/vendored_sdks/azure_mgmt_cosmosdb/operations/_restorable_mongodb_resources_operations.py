@@ -40,8 +40,12 @@ class RestorableMongodbResourcesOperations(object):
 
     def list(
             self, location, instance_id, restore_location=None, restore_timestamp_in_utc=None, custom_headers=None, raw=False, **operation_config):
-        """Lists all the restorable Azure Cosmos DB MongoDB resources available
-        for a specific database account at a given time and location.
+        """Return a list of database and collection combo that exist on the
+        account at the given timestamp and location. This helps in scenarios to
+        validate what resources exist at given timestamp and location. This API
+        requires
+        'Microsoft.DocumentDB/locations/restorableDatabaseAccounts/*/read'
+        permission.
 
         :param location: Cosmos DB region, with spaces between words and each
          word capitalized.

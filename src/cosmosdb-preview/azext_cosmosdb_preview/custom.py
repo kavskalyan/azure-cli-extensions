@@ -393,3 +393,16 @@ def cli_cosmosdb_restorable_database_account_list(client,
         if account.account_name == account_name:
             matching_restorable_accounts.append(account)
     return matching_restorable_accounts
+
+def cli_retrieve_latest_backup_time(client,
+                                    resource_group_name,
+                                    account_name,
+                                    database_name,
+                                    container_name,
+                                    location):
+    return client.retrieve_continuous_backup_information(resource_group_name,
+                                                         account_name,
+                                                         database_name,
+                                                         container_name,
+                                                         location)
+    

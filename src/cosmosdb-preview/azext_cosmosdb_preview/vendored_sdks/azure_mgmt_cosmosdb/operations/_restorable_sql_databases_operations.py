@@ -40,8 +40,12 @@ class RestorableSqlDatabasesOperations(object):
 
     def list(
             self, location, instance_id, custom_headers=None, raw=False, **operation_config):
-        """Lists all the restorable Azure Cosmos DB SQL databases available under
-        the restorable account.
+        """Show the event feed of all mutations done on all the Azure Cosmos DB
+        SQL databases under the restorable account.  This helps in scenario
+        where database was accidentally deleted to get the deletion time.  This
+        API requires
+        'Microsoft.DocumentDB/locations/restorableDatabaseAccounts/*/read'
+        permission.
 
         :param location: Cosmos DB region, with spaces between words and each
          word capitalized.

@@ -260,6 +260,23 @@ class AzureEntityResource(Resource):
         self.etag = None
 
 
+class BackupInformation(Model):
+    """Backup information of a resource.
+
+    :param continuous_backup_information:
+    :type continuous_backup_information:
+     ~azure.mgmt.cosmosdb.models.ContinuousBackupInformation
+    """
+
+    _attribute_map = {
+        'continuous_backup_information': {'key': 'continuousBackupInformation', 'type': 'ContinuousBackupInformation'},
+    }
+
+    def __init__(self, **kwargs):
+        super(BackupInformation, self).__init__(**kwargs)
+        self.continuous_backup_information = kwargs.get('continuous_backup_information', None)
+
+
 class BackupPolicy(Model):
     """The object representing the policy for taking backups on an account.
 
@@ -938,6 +955,23 @@ class ContainerPartitionKey(Model):
         self.paths = kwargs.get('paths', None)
         self.kind = kwargs.get('kind', "Hash")
         self.version = kwargs.get('version', None)
+
+
+class ContinuousBackupInformation(Model):
+    """Continuous backup description.
+
+    :param latest_restorable_timestamp: The latest restorable timestamp for a
+     resource.
+    :type latest_restorable_timestamp: str
+    """
+
+    _attribute_map = {
+        'latest_restorable_timestamp': {'key': 'latestRestorableTimestamp', 'type': 'str'},
+    }
+
+    def __init__(self, **kwargs):
+        super(ContinuousBackupInformation, self).__init__(**kwargs)
+        self.latest_restorable_timestamp = kwargs.get('latest_restorable_timestamp', None)
 
 
 class ContinuousModeBackupPolicy(BackupPolicy):
@@ -3749,6 +3783,10 @@ class PeriodicModeProperties(Model):
     :param backup_retention_interval_in_hours: An integer representing the
      time (in hours) that each backup is retained
     :type backup_retention_interval_in_hours: int
+    :param backup_storage_redundancy: Enum to indicate type of backup
+     residency. Possible values include: 'Geo', 'Local', 'Zone'
+    :type backup_storage_redundancy: str or
+     ~azure.mgmt.cosmosdb.models.BackupStorageRedundancy
     """
 
     _validation = {
@@ -3759,12 +3797,14 @@ class PeriodicModeProperties(Model):
     _attribute_map = {
         'backup_interval_in_minutes': {'key': 'backupIntervalInMinutes', 'type': 'int'},
         'backup_retention_interval_in_hours': {'key': 'backupRetentionIntervalInHours', 'type': 'int'},
+        'backup_storage_redundancy': {'key': 'backupStorageRedundancy', 'type': 'str'},
     }
 
     def __init__(self, **kwargs):
         super(PeriodicModeProperties, self).__init__(**kwargs)
         self.backup_interval_in_minutes = kwargs.get('backup_interval_in_minutes', None)
         self.backup_retention_interval_in_hours = kwargs.get('backup_retention_interval_in_hours', None)
+        self.backup_storage_redundancy = kwargs.get('backup_storage_redundancy', None)
 
 
 class Permission(Model):
@@ -3966,6 +4006,22 @@ class PrivateLinkServiceConnectionStateProperty(Model):
         self.description = kwargs.get('description', None)
 
 
+class RegionForBackupInformation(Model):
+    """RegionForBackupInformation.
+
+    :param location: The name of the region.
+    :type location: str
+    """
+
+    _attribute_map = {
+        'location': {'key': 'location', 'type': 'str'},
+    }
+
+    def __init__(self, **kwargs):
+        super(RegionForBackupInformation, self).__init__(**kwargs)
+        self.location = kwargs.get('location', None)
+
+
 class RegionForOnlineOffline(Model):
     """Cosmos DB region to online or offline.
 
@@ -3989,25 +4045,12 @@ class RegionForOnlineOffline(Model):
         self.region = kwargs.get('region', None)
 
 
-class RestorableDatabaseAccountGetResult(ARMResourceProperties):
+class RestorableDatabaseAccountGetResult(Model):
     """A Azure Cosmos DB restorable database account.
 
     Variables are only populated by the server, and will be ignored when
     sending a request.
 
-    :ivar id: The unique resource identifier of the ARM resource.
-    :vartype id: str
-    :ivar name: The name of the ARM resource.
-    :vartype name: str
-    :ivar type: The type of Azure resource.
-    :vartype type: str
-    :param location: The location of the resource group to which the resource
-     belongs.
-    :type location: str
-    :param tags:
-    :type tags: dict[str, str]
-    :param identity:
-    :type identity: ~azure.mgmt.cosmosdb.models.ManagedServiceIdentity
     :param account_name: The name of the global database account
     :type account_name: str
     :param creation_time: The creation time of the restorable database account
@@ -4024,28 +4067,35 @@ class RestorableDatabaseAccountGetResult(ARMResourceProperties):
      account can be restored from.
     :vartype restorable_locations:
      list[~azure.mgmt.cosmosdb.models.RestorableLocationResource]
+    :ivar id: The unique resource identifier of the ARM resource.
+    :vartype id: str
+    :ivar name: The name of the ARM resource.
+    :vartype name: str
+    :ivar type: The type of Azure resource.
+    :vartype type: str
+    :param location: The location of the resource group to which the resource
+     belongs.
+    :type location: str
     """
 
     _validation = {
+        'api_type': {'readonly': True},
+        'restorable_locations': {'readonly': True},
         'id': {'readonly': True},
         'name': {'readonly': True},
         'type': {'readonly': True},
-        'api_type': {'readonly': True},
-        'restorable_locations': {'readonly': True},
     }
 
     _attribute_map = {
-        'id': {'key': 'id', 'type': 'str'},
-        'name': {'key': 'name', 'type': 'str'},
-        'type': {'key': 'type', 'type': 'str'},
-        'location': {'key': 'location', 'type': 'str'},
-        'tags': {'key': 'tags', 'type': '{str}'},
-        'identity': {'key': 'identity', 'type': 'ManagedServiceIdentity'},
         'account_name': {'key': 'properties.accountName', 'type': 'str'},
         'creation_time': {'key': 'properties.creationTime', 'type': 'iso-8601'},
         'deletion_time': {'key': 'properties.deletionTime', 'type': 'iso-8601'},
         'api_type': {'key': 'properties.apiType', 'type': 'str'},
         'restorable_locations': {'key': 'properties.restorableLocations', 'type': '[RestorableLocationResource]'},
+        'id': {'key': 'id', 'type': 'str'},
+        'name': {'key': 'name', 'type': 'str'},
+        'type': {'key': 'type', 'type': 'str'},
+        'location': {'key': 'location', 'type': 'str'},
     }
 
     def __init__(self, **kwargs):
@@ -4055,6 +4105,10 @@ class RestorableDatabaseAccountGetResult(ARMResourceProperties):
         self.deletion_time = kwargs.get('deletion_time', None)
         self.api_type = None
         self.restorable_locations = None
+        self.id = None
+        self.name = None
+        self.type = None
+        self.location = kwargs.get('location', None)
 
 
 class RestorableLocationResource(Model):
@@ -4098,28 +4152,22 @@ class RestorableLocationResource(Model):
         self.deletion_time = None
 
 
-class RestorableMongodbCollectionGetResult(ARMResourceProperties):
-    """An Azure Cosmos DB restorable MongoDB collection.
+class RestorableMongodbCollectionGetResult(Model):
+    """An Azure Cosmos DB MongoDB collection event.
 
     Variables are only populated by the server, and will be ignored when
     sending a request.
 
-    :ivar id: The unique resource identifier of the ARM resource.
+    :param resource: The resource of an Azure Cosmos DB MongoDB collection
+     event
+    :type resource:
+     ~azure.mgmt.cosmosdb.models.RestorableMongodbCollectionPropertiesResource
+    :ivar id: The unique resource Identifier of the ARM resource.
     :vartype id: str
     :ivar name: The name of the ARM resource.
     :vartype name: str
     :ivar type: The type of Azure resource.
     :vartype type: str
-    :param location: The location of the resource group to which the resource
-     belongs.
-    :type location: str
-    :param tags:
-    :type tags: dict[str, str]
-    :param identity:
-    :type identity: ~azure.mgmt.cosmosdb.models.ManagedServiceIdentity
-    :param resource:
-    :type resource:
-     ~azure.mgmt.cosmosdb.models.RestorableMongodbCollectionPropertiesResource
     """
 
     _validation = {
@@ -4129,22 +4177,22 @@ class RestorableMongodbCollectionGetResult(ARMResourceProperties):
     }
 
     _attribute_map = {
+        'resource': {'key': 'properties.resource', 'type': 'RestorableMongodbCollectionPropertiesResource'},
         'id': {'key': 'id', 'type': 'str'},
         'name': {'key': 'name', 'type': 'str'},
         'type': {'key': 'type', 'type': 'str'},
-        'location': {'key': 'location', 'type': 'str'},
-        'tags': {'key': 'tags', 'type': '{str}'},
-        'identity': {'key': 'identity', 'type': 'ManagedServiceIdentity'},
-        'resource': {'key': 'properties.resource', 'type': 'RestorableMongodbCollectionPropertiesResource'},
     }
 
     def __init__(self, **kwargs):
         super(RestorableMongodbCollectionGetResult, self).__init__(**kwargs)
         self.resource = kwargs.get('resource', None)
+        self.id = None
+        self.name = None
+        self.type = None
 
 
 class RestorableMongodbCollectionPropertiesResource(Model):
-    """RestorableMongodbCollectionPropertiesResource.
+    """The resource of an Azure Cosmos DB MongoDB collection event.
 
     Variables are only populated by the server, and will be ignored when
     sending a request.
@@ -4154,12 +4202,11 @@ class RestorableMongodbCollectionPropertiesResource(Model):
     :ivar operation_type: The operation type of this collection event.
      Possible values include: 'Create', 'Replace', 'Delete', 'SystemOperation'
     :vartype operation_type: str or ~azure.mgmt.cosmosdb.models.OperationType
-    :ivar event_timestamp: The timestamp of this collection event.
+    :ivar event_timestamp: The time when this collection event happened.
     :vartype event_timestamp: str
-    :ivar owner_id: The name of this restorable MongoDB collection.
+    :ivar owner_id: The name of this MongoDB collection.
     :vartype owner_id: str
-    :ivar owner_resource_id: The resource Id of this restorable MongoDB
-     collection.
+    :ivar owner_resource_id: The resource ID of this MongoDB collection.
     :vartype owner_resource_id: str
     """
 
@@ -4188,28 +4235,21 @@ class RestorableMongodbCollectionPropertiesResource(Model):
         self.owner_resource_id = None
 
 
-class RestorableMongodbDatabaseGetResult(ARMResourceProperties):
-    """An Azure Cosmos DB restorable MongoDB database.
+class RestorableMongodbDatabaseGetResult(Model):
+    """An Azure Cosmos DB MongoDB database event.
 
     Variables are only populated by the server, and will be ignored when
     sending a request.
 
-    :ivar id: The unique resource identifier of the ARM resource.
+    :param resource: The resource of an Azure Cosmos DB MongoDB database event
+    :type resource:
+     ~azure.mgmt.cosmosdb.models.RestorableMongodbDatabasePropertiesResource
+    :ivar id: The unique resource Identifier of the ARM resource.
     :vartype id: str
     :ivar name: The name of the ARM resource.
     :vartype name: str
     :ivar type: The type of Azure resource.
     :vartype type: str
-    :param location: The location of the resource group to which the resource
-     belongs.
-    :type location: str
-    :param tags:
-    :type tags: dict[str, str]
-    :param identity:
-    :type identity: ~azure.mgmt.cosmosdb.models.ManagedServiceIdentity
-    :param resource:
-    :type resource:
-     ~azure.mgmt.cosmosdb.models.RestorableMongodbDatabasePropertiesResource
     """
 
     _validation = {
@@ -4219,22 +4259,22 @@ class RestorableMongodbDatabaseGetResult(ARMResourceProperties):
     }
 
     _attribute_map = {
+        'resource': {'key': 'properties.resource', 'type': 'RestorableMongodbDatabasePropertiesResource'},
         'id': {'key': 'id', 'type': 'str'},
         'name': {'key': 'name', 'type': 'str'},
         'type': {'key': 'type', 'type': 'str'},
-        'location': {'key': 'location', 'type': 'str'},
-        'tags': {'key': 'tags', 'type': '{str}'},
-        'identity': {'key': 'identity', 'type': 'ManagedServiceIdentity'},
-        'resource': {'key': 'properties.resource', 'type': 'RestorableMongodbDatabasePropertiesResource'},
     }
 
     def __init__(self, **kwargs):
         super(RestorableMongodbDatabaseGetResult, self).__init__(**kwargs)
         self.resource = kwargs.get('resource', None)
+        self.id = None
+        self.name = None
+        self.type = None
 
 
 class RestorableMongodbDatabasePropertiesResource(Model):
-    """RestorableMongodbDatabasePropertiesResource.
+    """The resource of an Azure Cosmos DB MongoDB database event.
 
     Variables are only populated by the server, and will be ignored when
     sending a request.
@@ -4244,12 +4284,11 @@ class RestorableMongodbDatabasePropertiesResource(Model):
     :ivar operation_type: The operation type of this database event. Possible
      values include: 'Create', 'Replace', 'Delete', 'SystemOperation'
     :vartype operation_type: str or ~azure.mgmt.cosmosdb.models.OperationType
-    :ivar event_timestamp: The timestamp of this database event.
+    :ivar event_timestamp: The time when this database event happened.
     :vartype event_timestamp: str
-    :ivar owner_id: The name of this restorable MongoDB database.
+    :ivar owner_id: The name of this MongoDB database.
     :vartype owner_id: str
-    :ivar owner_resource_id: The resource Id of this restorable MongoDB
-     database.
+    :ivar owner_resource_id: The resource ID of this MongoDB database.
     :vartype owner_resource_id: str
     """
 
@@ -4278,28 +4317,21 @@ class RestorableMongodbDatabasePropertiesResource(Model):
         self.owner_resource_id = None
 
 
-class RestorableSqlContainerGetResult(ARMResourceProperties):
-    """An Azure Cosmos DB restorable SQL container.
+class RestorableSqlContainerGetResult(Model):
+    """An Azure Cosmos DB SQL container event.
 
     Variables are only populated by the server, and will be ignored when
     sending a request.
 
-    :ivar id: The unique resource identifier of the ARM resource.
+    :param resource: The resource of an Azure Cosmos DB SQL container event
+    :type resource:
+     ~azure.mgmt.cosmosdb.models.RestorableSqlContainerPropertiesResource
+    :ivar id: The unique resource Identifier of the ARM resource.
     :vartype id: str
     :ivar name: The name of the ARM resource.
     :vartype name: str
     :ivar type: The type of Azure resource.
     :vartype type: str
-    :param location: The location of the resource group to which the resource
-     belongs.
-    :type location: str
-    :param tags:
-    :type tags: dict[str, str]
-    :param identity:
-    :type identity: ~azure.mgmt.cosmosdb.models.ManagedServiceIdentity
-    :param resource:
-    :type resource:
-     ~azure.mgmt.cosmosdb.models.RestorableSqlContainerPropertiesResource
     """
 
     _validation = {
@@ -4309,22 +4341,22 @@ class RestorableSqlContainerGetResult(ARMResourceProperties):
     }
 
     _attribute_map = {
+        'resource': {'key': 'properties.resource', 'type': 'RestorableSqlContainerPropertiesResource'},
         'id': {'key': 'id', 'type': 'str'},
         'name': {'key': 'name', 'type': 'str'},
         'type': {'key': 'type', 'type': 'str'},
-        'location': {'key': 'location', 'type': 'str'},
-        'tags': {'key': 'tags', 'type': '{str}'},
-        'identity': {'key': 'identity', 'type': 'ManagedServiceIdentity'},
-        'resource': {'key': 'properties.resource', 'type': 'RestorableSqlContainerPropertiesResource'},
     }
 
     def __init__(self, **kwargs):
         super(RestorableSqlContainerGetResult, self).__init__(**kwargs)
         self.resource = kwargs.get('resource', None)
+        self.id = None
+        self.name = None
+        self.type = None
 
 
 class RestorableSqlContainerPropertiesResource(Model):
-    """RestorableSqlContainerPropertiesResource.
+    """The resource of an Azure Cosmos DB SQL container event.
 
     Variables are only populated by the server, and will be ignored when
     sending a request.
@@ -4334,13 +4366,13 @@ class RestorableSqlContainerPropertiesResource(Model):
     :ivar operation_type: The operation type of this container event. Possible
      values include: 'Create', 'Replace', 'Delete', 'SystemOperation'
     :vartype operation_type: str or ~azure.mgmt.cosmosdb.models.OperationType
-    :ivar event_timestamp: The timestamp of this container event.
+    :ivar event_timestamp: The when this container event happened.
     :vartype event_timestamp: str
-    :ivar owner_id: The name of this restorable SQL container.
+    :ivar owner_id: The name of this SQL container.
     :vartype owner_id: str
-    :ivar owner_resource_id: The resource Id of this restorable SQL container.
+    :ivar owner_resource_id: The resource ID of this SQL container.
     :vartype owner_resource_id: str
-    :param container:
+    :param container: Cosmos DB SQL container resource object
     :type container:
      ~azure.mgmt.cosmosdb.models.RestorableSqlContainerPropertiesResourceContainer
     """
@@ -4373,7 +4405,7 @@ class RestorableSqlContainerPropertiesResource(Model):
 
 
 class RestorableSqlContainerPropertiesResourceContainer(Model):
-    """RestorableSqlContainerPropertiesResourceContainer.
+    """Cosmos DB SQL container resource object.
 
     Variables are only populated by the server, and will be ignored when
     sending a request.
@@ -4447,28 +4479,21 @@ class RestorableSqlContainerPropertiesResourceContainer(Model):
         self._self = None
 
 
-class RestorableSqlDatabaseGetResult(ARMResourceProperties):
-    """An Azure Cosmos DB restorable SQL database.
+class RestorableSqlDatabaseGetResult(Model):
+    """An Azure Cosmos DB SQL database event.
 
     Variables are only populated by the server, and will be ignored when
     sending a request.
 
-    :ivar id: The unique resource identifier of the ARM resource.
+    :param resource: The resource of an Azure Cosmos DB SQL database event
+    :type resource:
+     ~azure.mgmt.cosmosdb.models.RestorableSqlDatabasePropertiesResource
+    :ivar id: The unique resource Identifier of the ARM resource.
     :vartype id: str
     :ivar name: The name of the ARM resource.
     :vartype name: str
     :ivar type: The type of Azure resource.
     :vartype type: str
-    :param location: The location of the resource group to which the resource
-     belongs.
-    :type location: str
-    :param tags:
-    :type tags: dict[str, str]
-    :param identity:
-    :type identity: ~azure.mgmt.cosmosdb.models.ManagedServiceIdentity
-    :param resource:
-    :type resource:
-     ~azure.mgmt.cosmosdb.models.RestorableSqlDatabasePropertiesResource
     """
 
     _validation = {
@@ -4478,22 +4503,22 @@ class RestorableSqlDatabaseGetResult(ARMResourceProperties):
     }
 
     _attribute_map = {
+        'resource': {'key': 'properties.resource', 'type': 'RestorableSqlDatabasePropertiesResource'},
         'id': {'key': 'id', 'type': 'str'},
         'name': {'key': 'name', 'type': 'str'},
         'type': {'key': 'type', 'type': 'str'},
-        'location': {'key': 'location', 'type': 'str'},
-        'tags': {'key': 'tags', 'type': '{str}'},
-        'identity': {'key': 'identity', 'type': 'ManagedServiceIdentity'},
-        'resource': {'key': 'properties.resource', 'type': 'RestorableSqlDatabasePropertiesResource'},
     }
 
     def __init__(self, **kwargs):
         super(RestorableSqlDatabaseGetResult, self).__init__(**kwargs)
         self.resource = kwargs.get('resource', None)
+        self.id = None
+        self.name = None
+        self.type = None
 
 
 class RestorableSqlDatabasePropertiesResource(Model):
-    """RestorableSqlDatabasePropertiesResource.
+    """The resource of an Azure Cosmos DB SQL database event.
 
     Variables are only populated by the server, and will be ignored when
     sending a request.
@@ -4503,13 +4528,13 @@ class RestorableSqlDatabasePropertiesResource(Model):
     :ivar operation_type: The operation type of this database event. Possible
      values include: 'Create', 'Replace', 'Delete', 'SystemOperation'
     :vartype operation_type: str or ~azure.mgmt.cosmosdb.models.OperationType
-    :ivar event_timestamp: The timestamp of this database event.
+    :ivar event_timestamp: The time when this database event happened.
     :vartype event_timestamp: str
-    :ivar owner_id: The name of this restorable SQL database.
+    :ivar owner_id: The name of the SQL database.
     :vartype owner_id: str
-    :ivar owner_resource_id: The resource Id of this restorable SQL database.
+    :ivar owner_resource_id: The resource ID of the SQL database.
     :vartype owner_resource_id: str
-    :param database:
+    :param database: Cosmos DB SQL database resource object
     :type database:
      ~azure.mgmt.cosmosdb.models.RestorableSqlDatabasePropertiesResourceDatabase
     """
@@ -4542,7 +4567,7 @@ class RestorableSqlDatabasePropertiesResource(Model):
 
 
 class RestorableSqlDatabasePropertiesResourceDatabase(Model):
-    """RestorableSqlDatabasePropertiesResourceDatabase.
+    """Cosmos DB SQL database resource object.
 
     Variables are only populated by the server, and will be ignored when
     sending a request.

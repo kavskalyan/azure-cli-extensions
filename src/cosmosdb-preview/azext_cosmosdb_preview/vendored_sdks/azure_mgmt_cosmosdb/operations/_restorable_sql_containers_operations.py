@@ -40,8 +40,11 @@ class RestorableSqlContainersOperations(object):
 
     def list(
             self, location, instance_id, restorable_sql_database_rid=None, custom_headers=None, raw=False, **operation_config):
-        """Lists all the restorable Azure Cosmos DB SQL containers available for a
-        specific database.
+        """Show the event feed of all mutations done on all the Azure Cosmos DB
+        SQL containers under a specific database.  This helps in scenario where
+        container was accidentally deleted.  This API requires
+        'Microsoft.DocumentDB/locations/restorableDatabaseAccounts/*/read'
+        permission.
 
         :param location: Cosmos DB region, with spaces between words and each
          word capitalized.
@@ -49,8 +52,8 @@ class RestorableSqlContainersOperations(object):
         :param instance_id: The instanceId GUID of a restorable database
          account.
         :type instance_id: str
-        :param restorable_sql_database_rid: The resource id of the restorable
-         SQL database.
+        :param restorable_sql_database_rid: The resource ID of the SQL
+         database.
         :type restorable_sql_database_rid: str
         :param dict custom_headers: headers that will be added to the request
         :param bool raw: returns the direct response alongside the

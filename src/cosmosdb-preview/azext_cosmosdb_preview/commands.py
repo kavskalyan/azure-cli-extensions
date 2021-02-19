@@ -14,7 +14,8 @@ from azext_cosmosdb_preview._client_factory import (
     cf_restorable_sql_resources,
     cf_restorable_mongodb_databases,
     cf_restorable_mongodb_collections,
-    cf_restorable_mongodb_resources
+    cf_restorable_mongodb_resources,
+    cf_sql_resources
 )
 
 
@@ -51,6 +52,10 @@ def load_command_table(self, _):
         operations_tmpl='azext_cosmosdb_preview.vendored_sdks.azure_mgmt_cosmosdb.operations#RestorableMongodbResourcesOperations.{}',
         client_factory=cf_restorable_mongodb_resources)
 
+    cosmosdb_sql_sdk = CliCommandType(
+        operations_tmpl='azext_cosmosdb_preview.vendored_sdks.azure_mgmt_cosmosdb.operations#SqlResourcesOperations.{}',
+        client_factory=cf_sql_resources)
+
     with self.command_group('cosmosdb restorable-database-account', cosmosdb_restorable_database_accounts_sdk, client_factory=cf_restorable_database_accounts, is_preview=True) as g:
         g.show_command('show', 'get_by_location')
         g.custom_command('list', 'cli_cosmosdb_restorable_database_account_list')
@@ -70,6 +75,9 @@ def load_command_table(self, _):
 
     with self.command_group('cosmosdb sql restorable-resource', cosmosdb_restorable_sql_resources_sdk, client_factory=cf_restorable_sql_resources, is_preview=True) as g:
         g.command('list', 'list')
+
+    with self.command_group('cosmosdb sql', cosmosdb_sql_sdk, client_factory=cf_sql_resources, is_preview=True) as g:
+        g.custom_command('retrieve-latest-backup-time', 'cli_retrieve_latest_backup_time')
 
     with self.command_group('cosmosdb mongodb restorable-database', cosmosdb_restorable_mongodb_databases_sdk, client_factory=cf_restorable_mongodb_databases, is_preview=True) as g:
         g.command('list', 'list')

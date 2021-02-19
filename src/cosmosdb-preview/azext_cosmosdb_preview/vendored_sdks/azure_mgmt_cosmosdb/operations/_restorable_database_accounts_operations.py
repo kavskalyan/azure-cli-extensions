@@ -41,7 +41,9 @@ class RestorableDatabaseAccountsOperations(object):
     def list_by_location(
             self, location, custom_headers=None, raw=False, **operation_config):
         """Lists all the restorable Azure Cosmos DB database accounts available
-        under the subscription and in a region.
+        under the subscription and in a region.  This call requires
+        'Microsoft.DocumentDB/locations/restorableDatabaseAccounts/read'
+        permission.
 
         :param location: Cosmos DB region, with spaces between words and each
          word capitalized.
@@ -112,7 +114,9 @@ class RestorableDatabaseAccountsOperations(object):
     def list(
             self, custom_headers=None, raw=False, **operation_config):
         """Lists all the restorable Azure Cosmos DB database accounts available
-        under the subscription.
+        under the subscription. This call requires
+        'Microsoft.DocumentDB/locations/restorableDatabaseAccounts/read'
+        permission.
 
         :param dict custom_headers: headers that will be added to the request
         :param bool raw: returns the direct response alongside the
@@ -179,7 +183,9 @@ class RestorableDatabaseAccountsOperations(object):
     def get_by_location(
             self, location, instance_id, custom_headers=None, raw=False, **operation_config):
         """Retrieves the properties of an existing Azure Cosmos DB restorable
-        database account.
+        database account.  This call requires
+        'Microsoft.DocumentDB/locations/restorableDatabaseAccounts/read/*'
+        permission.
 
         :param location: Cosmos DB region, with spaces between words and each
          word capitalized.

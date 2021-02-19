@@ -17,6 +17,7 @@ try:
     from ._models_py3 import AutoscaleSettingsResource
     from ._models_py3 import AutoUpgradePolicyResource
     from ._models_py3 import AzureEntityResource
+    from ._models_py3 import BackupInformation
     from ._models_py3 import BackupPolicy
     from ._models_py3 import Capability
     from ._models_py3 import CassandraKeyspaceCreateUpdateParameters
@@ -37,6 +38,7 @@ try:
     from ._models_py3 import ConflictResolutionPolicy
     from ._models_py3 import ConsistencyPolicy
     from ._models_py3 import ContainerPartitionKey
+    from ._models_py3 import ContinuousBackupInformation
     from ._models_py3 import ContinuousModeBackupPolicy
     from ._models_py3 import CorsPolicy
     from ._models_py3 import CreateUpdateOptions
@@ -110,6 +112,7 @@ try:
     from ._models_py3 import PrivateLinkResource
     from ._models_py3 import PrivateLinkServiceConnectionStateProperty
     from ._models_py3 import ProxyResource
+    from ._models_py3 import RegionForBackupInformation
     from ._models_py3 import RegionForOnlineOffline
     from ._models_py3 import Resource
     from ._models_py3 import RestorableDatabaseAccountGetResult
@@ -177,6 +180,7 @@ except (SyntaxError, ImportError):
     from ._models import AutoscaleSettingsResource
     from ._models import AutoUpgradePolicyResource
     from ._models import AzureEntityResource
+    from ._models import BackupInformation
     from ._models import BackupPolicy
     from ._models import Capability
     from ._models import CassandraKeyspaceCreateUpdateParameters
@@ -197,6 +201,7 @@ except (SyntaxError, ImportError):
     from ._models import ConflictResolutionPolicy
     from ._models import ConsistencyPolicy
     from ._models import ContainerPartitionKey
+    from ._models import ContinuousBackupInformation
     from ._models import ContinuousModeBackupPolicy
     from ._models import CorsPolicy
     from ._models import CreateUpdateOptions
@@ -270,6 +275,7 @@ except (SyntaxError, ImportError):
     from ._models import PrivateLinkResource
     from ._models import PrivateLinkServiceConnectionStateProperty
     from ._models import ProxyResource
+    from ._models import RegionForBackupInformation
     from ._models import RegionForOnlineOffline
     from ._models import Resource
     from ._models import RestorableDatabaseAccountGetResult
@@ -383,6 +389,7 @@ from ._cosmos_db_management_client_enums import (
     KeyKind,
     UnitType,
     PrimaryAggregationType,
+    BackupStorageRedundancy,
     ApiType,
     RoleDefinitionType,
     OperationType,
@@ -396,6 +403,7 @@ __all__ = [
     'AutoscaleSettingsResource',
     'AutoUpgradePolicyResource',
     'AzureEntityResource',
+    'BackupInformation',
     'BackupPolicy',
     'Capability',
     'CassandraKeyspaceCreateUpdateParameters',
@@ -416,6 +424,7 @@ __all__ = [
     'ConflictResolutionPolicy',
     'ConsistencyPolicy',
     'ContainerPartitionKey',
+    'ContinuousBackupInformation',
     'ContinuousModeBackupPolicy',
     'CorsPolicy',
     'CreateUpdateOptions',
@@ -489,6 +498,7 @@ __all__ = [
     'PrivateLinkResource',
     'PrivateLinkServiceConnectionStateProperty',
     'ProxyResource',
+    'RegionForBackupInformation',
     'RegionForOnlineOffline',
     'Resource',
     'RestorableDatabaseAccountGetResult',
@@ -601,6 +611,7 @@ __all__ = [
     'KeyKind',
     'UnitType',
     'PrimaryAggregationType',
+    'BackupStorageRedundancy',
     'ApiType',
     'RoleDefinitionType',
     'OperationType',

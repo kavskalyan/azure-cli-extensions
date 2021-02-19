@@ -24,7 +24,7 @@ class BackupPolicyTypes(str, Enum):
 
 
 def load_arguments(self, _):
-
+    from knack.arguments import CLIArgumentType
     from azure.cli.core.commands.parameters import tags_type
 
     with self.argument_context('cosmosdb') as c:
@@ -114,3 +114,14 @@ def load_arguments(self, _):
         c.argument('instance_id', options_list=['--instance-id', '-i'], help="InstanceId of the Account", required=True)
         c.argument('restore_location', options_list=['--restore-location', '-r'], help="The region of the restore.", required=True)
         c.argument('restore_timestamp_in_utc', options_list=['--restore-timestamp', '-t'], help="The timestamp of the restore", required=True)
+
+    account_name_type = CLIArgumentType(options_list=['--account-name', '-a'], help="Cosmosdb account name.")
+    database_name_type = CLIArgumentType(options_list=['--database-name', '-d'], help='Database name.')
+    container_name_type = CLIArgumentType(options_list=['--container-name', '-c'], help='Container name.')
+
+     # Restorable Sql Containers
+    with self.argument_context('cosmosdb sql retrieve-latest-backup-time') as c:
+        c.argument('account_name', account_name_type, id_part=None, required=True)
+        c.argument('database_name', database_name_type, required=True)
+        c.argument('container_name', container_name_type, required=True)
+        c.argument('location', options_list=['--location', '-l'], help="Location of the account", required=True)
